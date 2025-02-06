@@ -1,3 +1,4 @@
+import logging
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import JSON
@@ -10,6 +11,20 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user_for_apache_kafka_proj
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
+# Configure file-only logging (no console output)
+log_handler = logging.FileHandler("logFile.txt", mode='a')
+log_handler.setLevel(logging.INFO)
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+log_handler.setFormatter(formatter)
+
+# Remove default Flask logging to console
+app.logger.handlers = []  # Clear existing handlers
+app.logger.addHandler(log_handler)
+app.logger.setLevel(logging.INFO)
+
+# Global log counter
+log_counter = 1
 
 # Define the Location model
 class Location(db.Model):
@@ -30,6 +45,29 @@ class Location(db.Model):
 # Initialize database tables
 with app.app_context():
     db.create_all()
+
+@app.before_request
+def log_request():
+    """Log each incoming request with index."""
+    global log_counter
+    request_data = request.get_json() if request.is_json else 'No JSON'
+    request_log = f"{log_counter} | REQUEST: {request.method} {request.path} | IP: {request.remote_addr} | Data: {request_data}"
+    
+    # Store the log index in request context
+    request.environ['log_index'] = log_counter
+    
+    # Increment log counter for next request
+    log_counter += 1
+
+    app.logger.info(request_log)
+
+@app.after_request
+def log_response(response):
+    """Log response on the same line as request."""
+    log_index = request.environ.get('log_index', 'Unknown')
+    response_log = f"{log_index} | RESPONSE: {response.status_code}"
+    app.logger.info(response_log)
+    return response
 
 @app.route('/push_location', methods=['POST'])
 def push_location():
