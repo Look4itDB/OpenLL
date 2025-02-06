@@ -1,0 +1,4 @@
+Flask==2.2.0
+requests==2.28.1
+# If you decide to use MySQL or PostgreSQL instead of SQLite, 
+# you'll need appropriate drivers: e.g. pymysql, psycopg2, etc.
