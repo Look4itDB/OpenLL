@@ -1,6 +1,0 @@
-2025-02-07 04:14:35,742 - INFO - 1 | REQUEST: POST /push_location | IP: 127.0.0.1 | Data: {'device_id': '030', 'coordinates': [{'latitude': 20.3131313, 'longitude': 10.121221}]}
-2025-02-07 04:14:35,787 - INFO - 1 | RESPONSE: 200
-2025-02-07 04:14:59,112 - INFO - 2 | REQUEST: POST /push_location | IP: 127.0.0.1 | Data: {'device_id': '030', 'coordinates': [{'latitude': 20.3131313, 'longitude': 10.121221}]}
-2025-02-07 04:14:59,138 - INFO - 2 | RESPONSE: 200
-2025-02-07 04:16:52,682 - INFO - 3 | REQUEST: POST /push_location | IP: 127.0.0.1 | Data: {'device_id': 'abhiram', 'coordinates': [{'latitude': 20.3131313, 'longitude': 10.121221}]}
-2025-02-07 04:16:52,694 - INFO - 3 | RESPONSE: 200
