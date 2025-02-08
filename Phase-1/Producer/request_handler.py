@@ -1,11 +1,14 @@
+import sys
+sys.dont_write_bytecode = True
+
 import aiohttp
-from config import API_URL, DEVICE_ID
+import random
+from config import API_URL, DEVICE_IDS
 
 async def send_request(session, index):
-    """Send a single POST request with random coordinates"""
     data = {
-        "device_id": DEVICE_ID,
-        "coordinates": [[index * 0.001, index * 0.002]]  # Random small variations
+        "device_id": random.choice(DEVICE_IDS),
+        "coordinates": [[index * 0.001, index * 0.002]]
     }
     async with session.post(API_URL, json=data) as response:
         status = response.status
